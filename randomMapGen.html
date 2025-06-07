@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+            <style>body {
+    margin: 0;
+    background-color: #000;
+    font-family: 'Lexend', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    color: white;
+}
+
+canvas {
+    border: 2px solid white;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(255,255,255, 0.1);
+    margin-bottom: 20px;
+}
+
+button {
+    padding-top: 14px;
+    padding-bottom: 14px;
+    padding-right: 8px;
+    padding-left: 8px;
+    font-family: 'Lexend', sans-serif;
+    border: 0px;
+    border-radius: 6px;
+    font-size: 14px;
+}</style>
+        </head>
+        <body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+            <h1>Random Map Generator</h1>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend&amp;display=swap" rel="stylesheet">
+<canvas id="map" width="500" height="500"></canvas>
+<button id="generate">Generate Map</button>
+
+            <script>window.addEventListener("DOMContentLoaded", () => {
+  const canvas=document.getElementById("map");
+  const ctx=canvas.getContext("2d");
+
+  const simplex=new SimplexNoise();
+
+  function generateMap() {
+    for (let x=0; x<500; x++) {
+      for (let y=0; y<500; y++) {
+        let nx=x/500-0.5;
+        let ny=y/500-0.5;
+        let distance=Math.sqrt(nx*nx+ny*ny)/0.707;
+        let falloff=Math.pow(distance, 2.5);
+        let elevation=((simplex.noise2D(x*0.01, y*0.01)+1)/2)-falloff;
+        if (elevation<0.24) {
+            ctx.fillStyle="#003"; // Deep Ocean
+        } else if (elevation<0.48) {
+            ctx.fillStyle="#06f"; // Shallow Ocean
+        } else if (elevation<0.5) {
+            ctx.fillStyle="#edc9af"; // Beach
+        } else if (elevation<0.6) {
+            ctx.fillStyle="#3c0"; // Grassland
+        } else if (elevation<0.85) {
+            ctx.fillStyle="#064"; // Alpine
+        } else {
+            ctx.fillStyle="#999"; // Mountain
+        }
+        ctx.fillRect(x,y,1,1);
+      }
+    }
+  }
+
+  document.getElementById("generate").addEventListener("click", generateMap);
+});</script>
+        
+    
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
